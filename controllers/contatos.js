@@ -1,9 +1,9 @@
 module.exports = function(app){
   var ContatoController = {
     index: function(req, res){
-      var usuario = req.session.usuario
+      var usuario  = req.session.usuario
         , contatos = usuario.contatos
-        , params = {usuario: usuario
+        , params   = {usuario: usuario
                   , contatos: contatos};
       res.render('contatos/index', params);
     },
@@ -23,7 +23,7 @@ module.exports = function(app){
       var id = req.params.id
         , usuario = req.session.usuario
         , contato = usuario.contatos[id]
-        , params = {usuario: usuario
+        , params  = {usuario: usuario
                   , contato: contato
                   , id: id};
       res.render('contatos/edit', params);
@@ -36,7 +36,7 @@ module.exports = function(app){
     },
     destroy: function(req, res){
       var usuario = req.session.usuario
-        , id = req.params.id;
+        , id      = req.params.id;
       usuario.contatos.splice(id, 1);
       res.redirect('/contatos');
     }
