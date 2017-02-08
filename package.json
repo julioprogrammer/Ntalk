@@ -9,6 +9,7 @@
   "dependencies": {
     "express": "~3.x",
     "express-load": "~1.1.14",
-    "ejs": "~1.0.0"
+    "ejs": "~1.0.0",
+    "socket.io": "0.9.16"
   }
 }
