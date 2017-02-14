@@ -1,6 +1,11 @@
+const KEY = 'ntalk.sid', SECRET = 'ntalk';
 var express        = require('express')
   , cookieParser   = require('cookie-parser')
+  , cookie         = cookieParser(SECRET)
+  , store          = new express.session.MemoryStore()
+  , sessOpts       = {secret: SECRET, key: KEY, store: store}
   , session        = require('express-session')
+  , session2       = express.session(sessOpts)
   , load           = require('express-load')
   , bodyParser     = require('body-parser')
   , methodOverride = require('method-override')
@@ -12,8 +17,8 @@ var express        = require('express')
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
-app.use(cookieParser('ntalk'));
-app.use(session());
+app.use(cookie);
+app.use(session2);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride());
@@ -27,14 +32,8 @@ load('models')
     .then('controllers')
     .then('routes')
     .into(app);
-
-io.sockets.on('connection', function (client) {
-  client.on('send-server', function (data) {
-    var msg = "<b>"+data.nome+":</b> "+data.msg+"<br>";
-    client.emit('send-client', msg);
-    client.broadcast.emit('send-client', msg);
-  });
-});
+load('sockets')
+    .into(io);
 
 // ...app.listen(3000)
 server.listen(3000, function(){
