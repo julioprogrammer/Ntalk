@@ -12,7 +12,10 @@ var express        = require('express')
   , app            = express()
   , error          = require('./middleware/error')
   , server         = require('http').createServer(app)
-  , io             = require('socket.io').listen(server);
+  , io             = require('socket.io').listen(server)
+  , mongoose       = require('mongoose');
+
+global.db = mongoose.connect('mongodb://localhost/ntalk');
 
 
 app.set('views', __dirname + '/views');
@@ -21,7 +24,7 @@ app.use(cookie);
 app.use(session2);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(methodOverride());
+app.use(methodOverride('_method'));
 app.use(app.router);
 app.use(express.static(__dirname + '/public'));
 app.use(error.notFound);
